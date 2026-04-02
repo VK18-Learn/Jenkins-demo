@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sshagent(['ec2-key']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@<EC2-PUBLIC-IP> "
+                    ssh -o StrictHostKeyChecking=no ubuntu@3.239.95.207"
                         cd /home/ubuntu &&
                         git pull &&
                         npm install &&
