@@ -2,12 +2,18 @@ pipeline {
     agent any
 
     stages {
-        stage('Check Node') {
+        stage('Deploy to EC2') {
             steps {
-                bat 'where node'
-                bat 'where npm'
-                bat 'node -v'
-                bat 'npm -v'
+                sshagent(['ec2-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@<EC2-PUBLIC-IP> "
+                        cd /home/ubuntu &&
+                        git pull &&
+                        npm install &&
+                        npm start
+                    "
+                    '''
+                }
             }
         }
     }
