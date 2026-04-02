@@ -2,9 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Deploy to EC2') {
             steps {
-                echo 'Hello from Jenkins 🚀'
+                sshagent(['your-credential-id']) {
+                    bat '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@YOUR_EC2_IP "
+                    echo 'Hello from Jenkins to AWS 🚀' > test.txt
+                    "
+                    '''
+                }
             }
         }
     }
