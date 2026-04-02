@@ -2,21 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Check Node') {
             steps {
-                git branch: 'main', url: 'https://github.com/VK18-Learn/Jenkins-demo.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                bat 'npm install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'npm test'
+                bat 'where node'
+                bat 'where npm'
+                bat 'node -v'
+                bat 'npm -v'
             }
         }
     }
