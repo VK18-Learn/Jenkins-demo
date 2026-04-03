@@ -2,17 +2,29 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy to EC2') {
+
+        stage('Clone Code') {
             steps {
-                sshagent(['ec2-key']) {
-                    bat '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@3.239.95.207 ^
-                    "cd /home/ubuntu &&
-                     git pull &&
-                     npm install &&
-                     npm start"
-                    '''
-                }
+                git 'https://github.com/your-repo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'scp target/app.jar ubuntu@<EC2-IP>:/home/ubuntu/'
+                sh 'ssh ubuntu@<EC2-IP> "nohup java -jar /home/ubuntu/app.jar &"'
             }
         }
     }
